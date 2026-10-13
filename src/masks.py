@@ -1,4 +1,3 @@
-
 def get_mask_card_nubmer(card_number: str) -> str:
     """Маскирует номер банковской карты."""
     if not card_number.isdigit() or len(card_number) != 16:
