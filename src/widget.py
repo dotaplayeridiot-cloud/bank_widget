@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from src.masks import get_mask_account, get_mask_card_nubmer
 
@@ -19,7 +20,6 @@ def mask_account_card(account_card: str) -> str:
         masked_number = get_mask_card_nubmer(number)
 
     return f"{name} {masked_number}"
-from datetime import datetime
 
 
 def get_date(date_string: str) -> str:
