@@ -15,13 +15,13 @@ def filter_by_state(
 
 
 def sort_by_date(
-    operations: list[dict[str, Any]], reverse: bool = True
+    operations: list[dict[str, Any]], is_reverse: bool = True
 ) -> list[dict[str, Any]]:
     """Вернуть новый список операций, отсортированный по дате.
 
     Даты — строки ISO 8601 в едином формате, как в примерах задания.
-    По умолчанию новые операции идут первыми; reverse=False меняет порядок.
+    По умолчанию новые операции идут первыми; is_reverse=False меняет порядок.
     При одинаковых датах сохраняется исходный порядок. Ключ date обязателен.
     Исходный список и словари не изменяются.
     """
-    return sorted(operations, key=lambda operation: operation["date"], reverse=reverse)
+    return sorted(operations, key=lambda operation: operation["date"], reverse=is_reverse)

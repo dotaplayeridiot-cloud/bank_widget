@@ -48,19 +48,19 @@ def test_sort_default(operations: list[dict[str, Any]]) -> None:
 
 def test_sort_ascending(operations: list[dict[str, Any]]) -> None:
     """Параметр False располагает старые операции первыми."""
-    assert sort_by_date(operations, False) == [
+    assert sort_by_date(operations, is_reverse=False) == [
         operations[1], operations[2], operations[3], operations[0]
     ]
 
 
-@pytest.mark.parametrize("reverse", [True, False])
-def test_sort_same_date(reverse: bool) -> None:
+@pytest.mark.parametrize("is_reverse", [True, False])
+def test_sort_same_date(is_reverse: bool) -> None:
     """При равных датах порядок сохраняется в обоих направлениях."""
     data = [
         {"id": 2, "date": "2024-01-01T12:00:00"},
         {"id": 1, "date": "2024-01-01T12:00:00"},
     ]
-    assert sort_by_date(data, reverse) == data
+    assert sort_by_date(data, is_reverse=is_reverse) == data
 
 
 def test_new_lists_without_mutation(operations: list[dict[str, Any]]) -> None:
