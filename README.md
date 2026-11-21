@@ -25,9 +25,9 @@ poetry install --with dev,lint
 операций с указанным статусом, сохраняя их исходный порядок.
 Записи без `state` пропускаются; регистр статуса учитывается.
 
-`sort_by_date(operations, reverse=True)` возвращает новый список,
+`sort_by_date(operations, is_reverse=True)` возвращает новый список,
 отсортированный по ключу `date`: по умолчанию новые операции идут первыми.
-Передайте `reverse=False` для сортировки от старых к новым.
+Передайте `is_reverse=False` для сортировки от старых к новым.
 Даты должны быть строками ISO 8601 в едином формате, например
 `2019-07-03T18:35:29.512364`, как в условиях задания. Ключ `date` обязателен.
 При одинаковых датах сохраняется исходный порядок записей.
@@ -118,3 +118,45 @@ poetry run pytest
 Работа 10.2 ведётся в отдельной ветке `feature/homework_10_2`, созданной
 от `develop` с включением функционала 10.1. Новый PR направлен в `develop`.
 Ветка и PR домашней работы 10.1 сохраняются без изменений для проверки.
+
+## Генераторы (домашняя работа 11.1)
+
+Модуль `src/generators.py` обрабатывает данные лениво, по одному элементу.
+
+- `filter_by_currency(transactions, currency)` возвращает итератор транзакций
+  с заданным кодом валюты (регистр учитывается), сохраняя исходный порядок.
+- `transaction_descriptions(transactions)` выдаёт описания через `yield`, включая повторения.
+- `card_number_generator(start, stop)` выдаёт номера от `start` до `stop` включительно:
+  16 цифр с ведущими нулями, разделённые на четыре группы пробелами.
+  Допустимые границы: 1–9999999999999999. Вне диапазона при переборе возникает
+  `ValueError`; при `start > stop` результат пуст.
+
+Пустой список транзакций даёт пустой итератор. Функции не меняют исходные данные.
+Ожидается структура транзакций из задания: `operationAmount.currency.code`
+и строковое поле `description`; отсутствие обязательного поля вызывает `KeyError`
+при чтении соответствующего элемента.
+
+```python
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
+
+transactions = [
+    {"operationAmount": {"currency": {"code": "USD"}}, "description": "Перевод организации"},
+    {"operationAmount": {"currency": {"code": "RUB"}}, "description": "Перевод со счета на счет"},
+]
+
+usd = filter_by_currency(transactions, "USD")
+print(next(usd)["description"])  # Перевод организации
+print(list(transaction_descriptions(transactions)))
+# ["Перевод организации", "Перевод со счета на счет"]
+for number in card_number_generator(start=1, stop=2):
+    print(number)
+# 0000 0000 0000 0001
+# 0000 0000 0000 0002
+```
+
+Тесты генераторов используют fixture и параметризацию: USD/RUB, отсутствие
+совпадений, пустой ввод, повторения, ленивость, формат и границы номеров.
+`poetry run pytest -q` запускает все тесты и обновляет HTML-отчёт
+`coverage_html/index.html`. Настроен порог покрытия выше 80% (минимум 81%).
+
+Работа 11.1 оформляется отдельным PR из `feature/homework_11_1` в `develop`.

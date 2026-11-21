@@ -26,10 +26,10 @@ def test_filter_missing_state(incomplete_operations: list[dict[str, Any]]) -> No
     assert filter_by_state(incomplete_operations) == []
 
 
-@pytest.mark.parametrize("reverse, indexes", [(True, [0, 3, 2, 1]), (False, [1, 2, 3, 0])])
-def test_sort_direction(operations: list[dict[str, Any]], reverse: bool, indexes: list[int]) -> None:
+@pytest.mark.parametrize("is_reverse, indexes", [(True, [0, 3, 2, 1]), (False, [1, 2, 3, 0])])
+def test_sort_direction(operations: list[dict[str, Any]], is_reverse: bool, indexes: list[int]) -> None:
     """Сортировать даты в обоих направлениях."""
-    assert sort_by_date(operations, reverse) == [operations[index] for index in indexes]
+    assert sort_by_date(operations, is_reverse) == [operations[index] for index in indexes]
 
 
 def test_sort_default(operations: list[dict[str, Any]]) -> None:
@@ -37,31 +37,31 @@ def test_sort_default(operations: list[dict[str, Any]]) -> None:
     assert sort_by_date(operations) == [operations[0], operations[3], operations[2], operations[1]]
 
 
-@pytest.mark.parametrize("reverse", [True, False])
-def test_sort_same_date(equal_date_operations: list[dict[str, Any]], reverse: bool) -> None:
+@pytest.mark.parametrize("is_reverse", [True, False])
+def test_sort_same_date(equal_date_operations: list[dict[str, Any]], is_reverse: bool) -> None:
     """При одинаковых датах сохранять исходный порядок в обе стороны."""
-    assert sort_by_date(equal_date_operations, reverse) == equal_date_operations
+    assert sort_by_date(equal_date_operations, is_reverse) == equal_date_operations
 
 
-@pytest.mark.parametrize("reverse", [True, False])
-def test_no_mutation(operations: list[dict[str, Any]], reverse: bool) -> None:
+@pytest.mark.parametrize("is_reverse", [True, False])
+def test_no_mutation(operations: list[dict[str, Any]], is_reverse: bool) -> None:
     """Вернуть новые списки, не изменяя исходные записи."""
     original = deepcopy(operations)
     filtered = filter_by_state(operations)
-    ordered = sort_by_date(operations, reverse)
+    ordered = sort_by_date(operations, is_reverse)
     assert filtered is not operations
     assert ordered is not operations
     assert operations == original
 
 
-@pytest.mark.parametrize("reverse", [True, False])
-def test_empty_lists(reverse: bool) -> None:
+@pytest.mark.parametrize("is_reverse", [True, False])
+def test_empty_lists(is_reverse: bool) -> None:
     """Пустой ввод обрабатывается без ошибок и возвращает новый список."""
     data: list[dict[str, Any]] = []
     assert filter_by_state(data) == []
-    assert sort_by_date(data, reverse) == []
+    assert sort_by_date(data, is_reverse) == []
     assert filter_by_state(data) is not data
-    assert sort_by_date(data, reverse) is not data
+    assert sort_by_date(data, is_reverse) is not data
 
 
 def test_missing_date(incomplete_operations: list[dict[str, Any]]) -> None:
