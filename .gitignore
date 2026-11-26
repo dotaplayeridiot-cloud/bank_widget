@@ -25,3 +25,7 @@ htmlcov/
 # Operating system
 .DS_Store
 Thumbs.db
+
+# Runtime logs
+*.log
+mylog.txt
