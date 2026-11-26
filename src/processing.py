@@ -24,4 +24,6 @@ def sort_by_date(
     При одинаковых датах сохраняется исходный порядок. Ключ date обязателен.
     Исходный список и словари не изменяются.
     """
+    # is_reverse — наш булев параметр; reverse — имя аргумента встроенной sorted.
+    # Переименование аргумента sorted в is_reverse вызовет TypeError.
     return sorted(operations, key=lambda operation: operation["date"], reverse=is_reverse)

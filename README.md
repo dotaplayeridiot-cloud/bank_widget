@@ -46,7 +46,7 @@ executed = filter_by_state(operations)
 print([item["id"] for item in executed])  # [1, 3]
 print([item["id"] for item in filter_by_state(operations, "CANCELED")])  # [2]
 print([item["id"] for item in sort_by_date(operations)])  # [1, 2, 3]
-print([item["id"] for item in sort_by_date(operations, False)])  # [3, 2, 1]
+print([item["id"] for item in sort_by_date(operations, is_reverse=False)])  # [3, 2, 1]
 ```
 
 ## Маскировка и даты
@@ -84,3 +84,12 @@ poetry run isort --check-only src tests
 Изменения оформляются отдельными коммитами. Для проверки домашней работы
 создаётся pull request из `feature/homework_10_1` в `develop`.
 Файлы IDE, виртуальные окружения и кеши исключены через `.gitignore`.
+
+## Именование параметра сортировки
+
+Булев параметр нашей функции называется `is_reverse`:
+`sort_by_date(operations, is_reverse=True)`. Такое же имя используется
+в тестах и примерах. Внутри функции вызов `sorted(..., reverse=is_reverse)`
+передаёт его значение стандартной функции Python: `reverse` — имя
+встроенного именованного аргумента, а не переменная проекта.
+Переименовать этот аргумент в `is_reverse` нельзя: `sorted` его не принимает.
